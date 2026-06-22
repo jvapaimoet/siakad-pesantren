@@ -2,58 +2,88 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Absen;
 use Illuminate\Http\Request;
+use App\Models\Absen;
 
 class AbsenController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $absen = Absen::latest()->get();
-        return view('absen.index', compact('absen'));
+        $absens = Absen::latest('tanggal')->get();
+        return view('absen.index', compact('absens'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
         return view('absen.create');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        $request->validate([
-            'nama_santri' => 'required',
-            'tanggal' => 'required',
-            'status' => 'required'
+        $validated = $request->validate([
+            'nama_santri' => 'required|string|max:255',
+            'tanggal' => 'required|date',
+            'status' => 'required|in:Hadir,Izin,Sakit,Alpha',
         ]);
 
-        Absen::create($request->all());
+        Absen::create($validated);
 
-        return redirect()->route('absen.index')->with('success', 'Absen berhasil ditambahkan');
+        return redirect()->route('absen.index')->with('success', 'Absensi berhasil ditambahkan!');
     }
 
-    public function edit($id)
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $absen = Absen::findOrFail($id);
+        return view('absen.show', compact('absen'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
     {
         $absen = Absen::findOrFail($id);
         return view('absen.edit', compact('absen'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
     {
-        $request->validate([
-            'nama_santri' => 'required',
-            'tanggal' => 'required',
-            'status' => 'required'
+        $absen = Absen::findOrFail($id);
+
+        $validated = $request->validate([
+            'nama_santri' => 'required|string|max:255',
+            'tanggal' => 'required|date',
+            'status' => 'required|in:Hadir,Izin,Sakit,Alpha',
         ]);
 
-        $absen = Absen::findOrFail($id);
-        $absen->update($request->all());
+        $absen->update($validated);
 
-        return redirect()->route('absen.index')->with('success', 'Data berhasil diupdate');
+        return redirect()->route('absen.index')->with('success', 'Absensi berhasil diubah!');
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
     {
-        Absen::destroy($id);
-        return redirect()->route('absen.index')->with('success', 'Data dihapus');
+        $absen = Absen::findOrFail($id);
+        $absen->delete();
+
+        return redirect()->route('absen.index')->with('success', 'Absensi berhasil dihapus!');
     }
 }

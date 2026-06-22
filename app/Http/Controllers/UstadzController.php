@@ -2,47 +2,94 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ustadz;
 use Illuminate\Http\Request;
+use App\Models\Ustadz;
 
-class ustadzController extends Controller
+class UstadzController extends Controller
 {
+    /**
+     * Menampilkan daftar ustadz
+     */
     public function index()
     {
-        $ustadz = ustadz::all();
-        return view('ustadz.index', compact('ustadz'));
+        $ustadzs = Ustadz::all();
+        return view('ustadz.index', [
+            'ustadzs' => $ustadzs
+        ]);
     }
 
+    /**
+     * Menampilkan form tambah ustadz
+     */
     public function create()
     {
         return view('ustadz.create');
     }
 
+    /**
+     * Menyimpan ustadz baru ke database
+     */
     public function store(Request $request)
     {
-        Ustadz::create($request->all());
-        return redirect('/ustadz');
+        $request->validate([
+            'nama'   => 'required',
+            'bidang' => 'required',
+            'no_hp'  => 'required',
+            'alamat' => 'required', // Tambahkan validasi alamat
+        ]);
+
+        Ustadz::create([
+            'nama'   => $request->nama,
+            'no_hp'  => $request->no_hp,
+            'bidang' => $request->bidang,
+            'alamat' => $request->alamat, // Tambahkan alamat ke database
+        ]);
+
+        return redirect()->route('ustadz.index')->with('success', 'Data Ustadz berhasil ditambahkan!');
     }
 
-    public function edit($id)
+    /**
+     * Menampilkan form EDIT ustadz
+     */
+    public function edit(string $id)
     {
-        $ustadz = ustadz::find($id);
-        return view('ustadz.edit', compact('ustadz'));
+        $ustadz = Ustadz::findOrFail($id);
+        return view('ustadz.edit', [
+            'ustadz' => $ustadz
+        ]);
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Memperbarui data ustadz di database
+     */
+    public function update(Request $request, string $id)
     {
-        $ustadz = ustadz::find($id);
-        $ustadz->update($request->all());
+        $request->validate([
+            'nama'   => 'required',
+            'bidang' => 'required',
+            'no_hp'  => 'required',
+            'alamat' => 'required',
+        ]);
 
-        return redirect('/ustadz');
+        $ustadz = Ustadz::findOrFail($id);
+        $ustadz->update([
+            'nama'   => $request->nama,
+            'no_hp'  => $request->no_hp,
+            'bidang' => $request->bidang,
+            'alamat' => $request->alamat,
+        ]);
+
+        return redirect()->route('ustadz.index')->with('success', 'Data Ustadz berhasil diperbarui!');
     }
 
-    public function destroy($id)
+    /**
+     * Menghapus data ustadz
+     */
+    public function destroy(string $id)
     {
-        $ustadz = ustadz::find($id);
+        $ustadz = Ustadz::findOrFail($id);
         $ustadz->delete();
 
-         return redirect('/ustadz');
+        return redirect()->route('ustadz.index')->with('success', 'Data Ustadz berhasil dihapus!');
     }
 }

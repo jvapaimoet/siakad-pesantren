@@ -4,50 +4,105 @@ namespace App\Http\Controllers;
 
 use App\Models\Jadwal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JadwalController extends Controller
 {
-    public function index()
+    /**
+     * Check if user can edit jadwal (only ustadz)
+     */
+    private function checkEditPermission()
     {
-        $jadwal = Jadwal::all();
-
-        return view('jadwal.index', compact('jadwal'));
+        if (Auth::user()->role !== 'ustadz') {
+            abort(403, 'Hanya ustadz yang dapat melakukan perubahan jadwal.');
+        }
     }
 
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $jadwals = Jadwal::orderBy('hari')->orderBy('jam')->get();
+        return view('jadwal.index', compact('jadwals'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
+        $this->checkEditPermission();
         return view('jadwal.create');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        Jadwal::create($request->all());
+        $this->checkEditPermission();
+        
+        $validated = $request->validate([
+            'nama_kegiatan' => 'required|string|max:255',
+            'hari' => 'required|string|max:50',
+            'jam' => 'required|date_format:H:i',
+        ]);
 
-        return redirect('/jadwal');
+        Jadwal::create($validated);
+
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil ditambahkan');
     }
 
-    public function edit($id)
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
-        $jadwal = Jadwal::find($id);
+        return redirect()->route('jadwal.index');
+    }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $this->checkEditPermission();
+        
+        $jadwal = Jadwal::findOrFail($id);
         return view('jadwal.edit', compact('jadwal'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
     {
-        $jadwal = Jadwal::find($id);
+        $this->checkEditPermission();
+        
+        $jadwal = Jadwal::findOrFail($id);
 
-        $jadwal->update($request->all());
+        $validated = $request->validate([
+            'nama_kegiatan' => 'required|string|max:255',
+            'hari' => 'required|string|max:50',
+            'jam' => 'required|date_format:H:i',
+        ]);
 
-        return redirect('/jadwal');
+        $jadwal->update($validated);
+
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diupdate');
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
     {
-        $jadwal = Jadwal::find($id);
-
+        $this->checkEditPermission();
+        
+        $jadwal = Jadwal::findOrFail($id);
         $jadwal->delete();
 
-        return redirect('/jadwal');
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dihapus');
     }
 }

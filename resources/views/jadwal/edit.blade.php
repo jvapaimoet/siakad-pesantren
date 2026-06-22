@@ -14,22 +14,19 @@ method="POST">
 
 <input type="text"
 name="nama_kegiatan"
-value="{{ $jadwal->nama_kegiatan }}"
+value="{{ old('nama_kegiatan', $jadwal->nama_kegiatan) }}"
+placeholder="Nama kegiatan"
 class="border w-full p-2 rounded mb-3">
 
 <input type="text"
-name="tempat"
-value="{{ $jadwal->tempat }}"
+name="hari"
+value="{{ old('hari', $jadwal->hari) }}"
+placeholder="Hari"
 class="border w-full p-2 rounded mb-3">
 
 <input type="time"
-name="waktu"
-value="{{ $jadwal->waktu }}"
-class="border w-full p-2 rounded mb-3">
-
-<input type="text"
-name="penanggung_jawab"
-value="{{ $jadwal->penanggung_jawab }}"
+name="jam"
+value="{{ old('jam', $jadwal->jam) }}"
 class="border w-full p-2 rounded mb-3">
 
 <button type="submit"

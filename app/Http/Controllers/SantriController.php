@@ -2,79 +2,101 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Santri;
 use Illuminate\Http\Request;
+use App\Models\Santri; // Memanggil model Santri
 
 class SantriController extends Controller
 {
-    // Tampilkan semua data santri
+    /**
+     * Menampilkan daftar semua santri (Halaman Utama Santri)
+     */
     public function index()
     {
-        $santri = Santri::latest()->get();
-        return view('santri.index', compact('santri'));
+        $santris = Santri::all();
+        return view('santri.index', compact('santris'));
     }
 
-    // Form tambah santri
+    /**
+     * Menampilkan formulir tambah santri (create.blade.php)
+     */
     public function create()
     {
         return view('santri.create');
     }
 
-    // Simpan data
+    /**
+     * Menyimpan data santri baru ke dalam database (Proses dari Form Create)
+     */
     public function store(Request $request)
     {
+        // 1. Validasi input dari form
         $request->validate([
-            'nis'   => 'required|unique:santris,nis',
-            'nama'  => 'required',
-            'kelas' => 'required',
+            'nama'          => 'required',
+            'jenis_kelamin' => 'required',
         ]);
 
+        // 2. Menyimpan data HANYA ke kolom yang ada di database Anda
         Santri::create([
-            'nis'   => $request->nis,
-            'nama'  => $request->nama,
-            'kelas' => $request->kelas,
+            'nama'          => $request->nama,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'kelas'         => $request->kelas, 
         ]);
 
-        return redirect()->route('santri.index')
-            ->with('success', 'Data santri berhasil ditambahkan');
+        // 3. Kembali ke halaman utama santri dengan notifikasi sukses
+        return redirect()->route('santri.index')->with('success', 'Data Santri baru berhasil ditambahkan!');
     }
 
-    // Detail (optional)
-    public function show($id)
+    /**
+     * Menampilkan detail informasi satu santri (Opsional)
+     */
+    public function show(string $id)
     {
         $santri = Santri::findOrFail($id);
         return view('santri.show', compact('santri'));
     }
 
-    // Edit form
-    public function edit($id)
+    /**
+     * Menampilkan formulir edit data santri (edit.blade.php)
+     */
+    public function edit(string $id)
     {
         $santri = Santri::findOrFail($id);
         return view('santri.edit', compact('santri'));
     }
 
-    // Update data
-    public function update(Request $request, $id)
+    /**
+     * Memperbarui data santri di database (Proses dari Form Edit)
+     */
+    public function update(Request $request, string $id)
     {
+        // 1. Validasi data yang diubah
         $request->validate([
-            'nis'   => 'required',
-            'nama'  => 'required',
-            'kelas' => 'required',
+            'nama'          => 'required',
+            'jenis_kelamin' => 'required',
         ]);
 
+        // 2. Cari data santri berdasarkan ID
         $santri = Santri::findOrFail($id);
-        $santri->update($request->all());
+        
+        // 3. Lakukan pembaruan data secara aman tanpa kolom 'nis'
+        $santri->update([
+            'nama'          => $request->nama,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'kelas'         => $request->kelas,
+        ]);
 
-        return redirect()->route('santri.index')
-            ->with('success', 'Data berhasil diupdate');
+        // 4. Kembali ke halaman utama santri dengan notifikasi sukses
+        return redirect()->route('santri.index')->with('success', 'Data Santri berhasil diperbarui!');
     }
 
-    // Hapus data
-    public function destroy($id)
+    /**
+     * Menghapus data santri dari database
+     */
+    public function destroy(string $id)
     {
-        Santri::destroy($id);
+        $santri = Santri::findOrFail($id);
+        $santri->delete();
 
-        return redirect()->route('santri.index')
-            ->with('success', 'Data berhasil dihapus');
+        return redirect()->route('santri.index')->with('success', 'Data Santri berhasil dihapus!');
     }
 }

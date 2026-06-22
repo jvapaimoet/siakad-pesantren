@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="{{ asset('images/pesantren.jpg') }}">
+    <link rel="icon" type="image/jpg" href="{{ asset('images/sipes.jpg.jpg') }}">
 </head>
 
 <body class="bg-gray-50 text-gray-800 font-sans">
@@ -19,17 +19,17 @@
     <header class="absolute top-0 left-0 w-full z-20">
         <div class="container mx-auto px-6 py-5 flex justify-between items-center">
 
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-4">
 
-                <div class="bg-white p-2 rounded-full shadow-md">
+                <div class="bg-white p-2 rounded-full shadow-lg">
                     <img
-                        src="{{ asset('images/pesantren.jpg') }}"
+                        src="{{ asset('images/sipes.jpg.jpg') }}"
                         alt="Logo SIPES"
-                        class="w-10 h-10 rounded-full object-cover">
+                        class="w-16 h-16 rounded-full object-cover">
                 </div>
 
                 <div class="text-white">
-                    <h1 class="text-2xl font-bold tracking-wide">
+                    <h1 class="text-3xl font-bold tracking-wide">
                         SIPES
                     </h1>
 
@@ -50,43 +50,40 @@
     </header>
 
     <!-- HERO SECTION -->
-    <section class="relative min-h-[700px] flex items-center justify-center text-center overflow-hidden">
+    <section class="relative min-h-screen flex items-center justify-center text-center overflow-hidden">
 
         <!-- Background Image -->
         <div class="absolute inset-0">
-
             <img
-                src="{{ asset('images/pesantren.jpg.jpeg') }}"
+                src="{{ asset('images/pesantren.jpeg.jpeg') }}"
                 alt="Pesantren"
                 class="w-full h-full object-cover">
-
         </div>
 
-        <!-- Overlay Gelap -->
+        <!-- Overlay -->
         <div class="absolute inset-0 bg-black/60"></div>
 
         <!-- Content -->
         <div class="relative z-10 px-6 max-w-5xl">
 
-            <h2 class="text-4xl md:text-6xl font-extrabold text-white mb-6">
+            <h2 class="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight">
                 Selamat Datang di Sistem Informasi Pesantren
             </h2>
 
             <p class="text-lg md:text-2xl text-gray-200 leading-relaxed">
-                Layanan integrasi data akademik,
-                absensi, pembayaran, dan informasi
-                hafalan santri secara real-time.
+                Layanan integrasi data akademik, absensi, pembayaran,
+                dan informasi hafalan santri secara real-time.
             </p>
 
             <div class="mt-10 flex flex-wrap justify-center gap-4">
 
                 <a href="/login"
-                   class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg transition">
+                   class="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-semibold shadow-lg transition">
                     Masuk Sistem
                 </a>
 
                 <a href="#portal"
-                   class="bg-white hover:bg-gray-100 text-gray-800 px-8 py-3 rounded-xl font-semibold shadow-lg transition">
+                   class="bg-white hover:bg-gray-100 text-gray-800 px-8 py-4 rounded-xl font-semibold shadow-lg transition">
                     Lihat Layanan
                 </a>
 
@@ -97,11 +94,20 @@
     </section>
 
     <!-- PORTAL -->
-    <main id="portal" class="container mx-auto px-6 py-16">
+    <main id="portal" class="container mx-auto px-6 py-20">
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="text-center mb-14">
+            <h2 class="text-4xl font-bold text-gray-800">
+                Portal SIPES
+            </h2>
+            <p class="text-gray-600 mt-3">
+                Pilih akses sesuai peran pengguna
+            </p>
+        </div>
 
-            <!-- Portal Santri -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <!-- Santri -->
             <div class="bg-white rounded-2xl shadow-lg p-8 text-center border border-gray-100 hover:-translate-y-2 hover:shadow-2xl transition duration-300">
 
                 <div class="text-5xl text-green-600 mb-5">
@@ -113,9 +119,8 @@
                 </h3>
 
                 <p class="text-gray-600 mb-6">
-                    Akses informasi pribadi,
-                    jadwal kegiatan, laporan absensi,
-                    dan perkembangan hafalan Al-Qur'an.
+                    Melihat data pribadi, absensi,
+                    jadwal kegiatan, dan perkembangan hafalan.
                 </p>
 
                 <a href="/login?role=santri"
@@ -125,7 +130,7 @@
 
             </div>
 
-            <!-- Portal Ustadz -->
+            <!-- Ustadz -->
             <div class="bg-white rounded-2xl shadow-lg p-8 text-center border border-gray-100 hover:-translate-y-2 hover:shadow-2xl transition duration-300">
 
                 <div class="text-5xl text-green-600 mb-5">
@@ -137,38 +142,13 @@
                 </h3>
 
                 <p class="text-gray-600 mb-6">
-                    Kelola data santri,
-                    input absensi harian,
-                    nilai kegiatan dan pengumuman.
+                    Mengelola data santri,
+                    absensi, penilaian dan pengumuman.
                 </p>
 
                 <a href="/login?role=ustadz"
                    class="block bg-green-600 text-white py-3 rounded-xl font-medium hover:bg-green-700 transition">
                     Masuk sebagai Ustadz
-                </a>
-
-            </div>
-
-            <!-- Portal Admin -->
-            <div class="bg-white rounded-2xl shadow-lg p-8 text-center border border-gray-100 hover:-translate-y-2 hover:shadow-2xl transition duration-300">
-
-                <div class="text-5xl text-gray-700 mb-5">
-                    <i class="fa-solid fa-user-gear"></i>
-                </div>
-
-                <h3 class="text-2xl font-bold mb-3">
-                    Portal Admin
-                </h3>
-
-                <p class="text-gray-600 mb-6">
-                    Manajemen penuh sistem,
-                    pengelolaan data santri,
-                    ustadz, pembayaran dan laporan.
-                </p>
-
-                <a href="/login?role=admin"
-                   class="block bg-gray-800 text-white py-3 rounded-xl font-medium hover:bg-gray-900 transition">
-                    Masuk sebagai Admin
                 </a>
 
             </div>

@@ -30,6 +30,7 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
+            'role' => ['required', 'in:santri,ustadz'],
         ];
     }
 
@@ -47,6 +48,15 @@ class LoginRequest extends FormRequest
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
+            ]);
+        }
+
+        if (Auth::user()->role !== $this->input('role')) {
+            Auth::logout();
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => 'Akun ini tidak sesuai dengan tipe login yang dipilih.',
             ]);
         }
 

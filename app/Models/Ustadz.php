@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Ustadz extends Model
 {
+    use HasFactory;
+
     protected $table = 'ustadz';
 
-    protected $fillable = [
-        'nama',
-        'bidang',
-        'no_hp',
-        'alamat'
-    ];
+    // Mengosongkan guarded berarti mengizinkan Laravel menyimpan field APAPUN yang kita kirim dari controller
+    protected $guarded = []; 
 }

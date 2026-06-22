@@ -9,6 +9,16 @@
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
+        <!-- Role -->
+        <div class="mt-4">
+            <x-input-label for="role" value="Tipe Akun" />
+            <select id="role" name="role" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                <option value="santri" @selected(old('role', request('role')) === 'santri')>Santri</option>
+                <option value="ustadz" @selected(old('role', request('role')) === 'ustadz')>Ustadz/Ustadzah</option>
+            </select>
+            <x-input-error :messages="$errors->get('role')" class="mt-2" />
+        </div>
+
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />

@@ -12,11 +12,27 @@ use Illuminate\View\View;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Display role selector.
      */
     public function create(): View
     {
-        return view('auth.login');
+        return view('auth.role-selector');
+    }
+
+    /**
+     * Display the ustadz login form.
+     */
+    public function ustadzForm(): View
+    {
+        return view('auth.login-ustadz');
+    }
+
+    /**
+     * Display the santri login form.
+     */
+    public function santriForm(): View
+    {
+        return view('auth.login-santri');
     }
 
     /**
@@ -28,6 +44,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Redirect ke dashboard untuk semua role
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
